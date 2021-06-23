@@ -5,6 +5,13 @@ build:
   project: LDView.vcxproj
   verbosity: minimal
 
+cache:
+  - Build
+  - LDLib/.obj-qt5
+  - TRE/.obj-qt5
+  - LDLoader/.obj-qt5
+  - TCFoundation/.obj-qt5
+
 environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2019
