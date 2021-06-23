@@ -11,6 +11,8 @@ cache:
   - TRE/.obj-qt5
   - LDLoader/.obj-qt5
   - TCFoundation/.obj-qt5
+  - LDExporter/.obj*
+  - QT/.obj*
 
 environment:
   matrix:
