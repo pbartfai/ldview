@@ -211,4 +211,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}  
         run: |
-          gh release list | grep Draft|cut -f1|grep -E v[0-8]{8}.[0-8]{6}|sort -n
+          gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -n
