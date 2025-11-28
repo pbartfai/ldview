@@ -5,7 +5,7 @@ on:
     tags:
     - 'v*'
   schedule:
-  - cron: '0 18 * * *'
+  - cron: '0 21 * * *'
 
 jobs:
   release:
@@ -29,7 +29,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           gh release create --draft "${{ steps.tag.outputs.tag }}" --title "${{ steps.tag.outputs.tag }}"
-  build-winows:
+  build-windows:
       needs: [release]
       runs-on: windows-2025
       steps:
@@ -191,3 +191,24 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run:  gh release upload "${{ needs.release.outputs.tag }}" MacOSX/LDView/distrib/LDView*.dmg
+  cleanup:
+    if: github.event_name != 'push'
+    needs:
+      - build-windows
+      - build-ubuntu
+      - build-fedora
+      - build-alpine
+      - build-debian
+      - build-appimage
+      - build-arch
+      - build-mac
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Remove old releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}  
+        run: |
+          gh release list | grep Draft|cut -f1|grep -E v[0-8]{8}.[0-8]{6}|sort -n
