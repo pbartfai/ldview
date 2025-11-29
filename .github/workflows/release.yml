@@ -5,7 +5,7 @@ on:
     tags:
     - 'v*'
   schedule:
-  - cron: '0 1,4,7,22 29 * *'
+  - cron: '0 8,9,10 29 * *'
 
 jobs:
   release:
@@ -212,5 +212,5 @@ jobs:
           GH_REPO: ${{ github.repository }}  
         run: |
           gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr
-          set OLD=$(gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr|tail +2)
+          OLD=$(gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr|tail +2)
           test ! -z "$OLD" && echo Remove $OLD
