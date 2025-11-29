@@ -5,7 +5,7 @@ on:
     tags:
     - 'v*'
   schedule:
-  - cron: '0 8,9,10 29 * *'
+  - cron: '0 8,9,12 29 * *'
 
 jobs:
   release:
@@ -213,4 +213,4 @@ jobs:
         run: |
           gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr
           OLD=$(gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr|tail +2)
-          for tag in $OLD ; do echo gh release delete $OLD ; done
+          for tag in $OLD ; do echo gh release delete $tag ; done
