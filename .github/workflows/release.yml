@@ -28,10 +28,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
+          ver=$(echo ${{ steps.tag.outputs.tag }} | cut -c2-)
           if [[ "${{ github.event_name }}" != "push" ]]; then
-            gh release create --draft "${{ steps.tag.outputs.tag }}" --title "LDView Snapshot ${{ steps.tag.outputs.tag }}"
+            gh release create --draft "${{ steps.tag.outputs.tag }}" --title "LDView Snapshot $ver"
           else
-            gh release create --draft "${{ steps.tag.outputs.tag }}" --title "LDView ${{ steps.tag.outputs.tag }}"
+            gh release create --draft "${{ steps.tag.outputs.tag }}" --title "LDView $ver"
           fi
   build-windows:
       needs: [release]
