@@ -213,4 +213,4 @@ jobs:
         run: |
           gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr
           OLD=$(gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr|tail +2)
-          test ! -z "$OLD" && echo Remove $OLD
+          for tag in $OLD ; do echo gh release delete $OLD ; done
