@@ -5,7 +5,7 @@ on:
     tags:
     - 'v*'
   schedule:
-  - cron: '0 8,9,12 29 * *'
+  - cron: '0 19,20,21,22 29 * *'
 
 jobs:
   release:
@@ -18,7 +18,7 @@ jobs:
         id: tag
         run: |
           if [[ "${{ github.event_name }}" != "push" ]]; then
-            tag=v$(date +%Y%m%d.%H%M%S)
+            tag=v$(date +%Y-%m-%d.%H:%M:%S)
           else
             tag=$(basename "${{ github.ref }}")
           fi
@@ -28,7 +28,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          gh release create --draft "${{ steps.tag.outputs.tag }}" --title "${{ steps.tag.outputs.tag }}"
+          if [[ "${{ github.event_name }}" != "push" ]]; then
+            gh release create --draft "${{ steps.tag.outputs.tag }}" --title "LDView Snapshot ${{ steps.tag.outputs.tag }}"
+          else
+            gh release create --draft "${{ steps.tag.outputs.tag }}" --title "LDView ${{ steps.tag.outputs.tag }}"
+          fi
   build-windows:
       needs: [release]
       runs-on: windows-2025
@@ -211,6 +215,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}  
         run: |
-          gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr
-          OLD=$(gh release list | grep Draft|cut -f1|grep -E v[0-9]{8}.[0-9]{6}|sort -nr|tail +2)
-          for tag in $OLD ; do echo gh release delete $tag ; done
+          gh release list |cut -f1|grep Snapshot|sort -nr
+          gh release list |cut -f1|grep Snapshot|sort -nr|tail +3|\
+          (while read tag ; do echo gh release delete -y --cleanup-tag $tag ; done)
