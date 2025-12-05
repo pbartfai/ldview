@@ -5,8 +5,8 @@ on:
   push:
 #    tags:
 #    - 'v*'
-#  schedule:
-#  - cron: '0 10 * * *'
+  schedule:
+  - cron: '0 9,10 5 * *'
 
 jobs:
   prepare:
