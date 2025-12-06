@@ -1,10 +1,7 @@
 @echo off
-if exist lib3ds-20080909.zip goto srcfound
-curl -OJL https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/lib3ds/lib3ds-20080909.zip
-:srcfound
-if exist lib3ds-20080909 goto dirfound
-PowerShell Expand-Archive -Path lib3ds-20080909.zip -DestinationPath .
-:dirfound
+if not exist lib3ds-20080909.zip curl -OJL https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/lib3ds/lib3ds-20080909.zip
+if exist lib3ds-20080909 PowerShell Expand-Archive -Path lib3ds-20080909.zip -DestinationPath .
+
 cd lib3ds-20080909
 cd src
 for /d %%c in ("%VCToolsInstallDir%\..\14.16.*") do set CC1=%%c
