@@ -7,7 +7,8 @@ on:
       - QT/OBS/*
       - QT/docker/Dockerfile*
       - QT/freebsd/*
-      - 3RdParty/*.cmd
+      - 3rdParty/*.cmd
+      - 3rdParty/BuildInstructions/MacOSX/*
 #    tags:
 #    - 'v*'
   schedule:
