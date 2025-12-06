@@ -9,6 +9,7 @@ on:
       - QT/freebsd/*
       - 3rdParty/*.cmd
       - 3rdParty/BuildInstructions/MacOSX/*
+      - appveyor.yml
 #    tags:
 #    - 'v*'
   schedule:
