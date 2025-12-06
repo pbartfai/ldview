@@ -3,6 +3,11 @@ name: Build2
 on:
   pull_request:
   push:
+    paths-ignore:
+      - QT/OBS/*
+      - QT/docker/Dockerfile*
+      - QT/freebsd/*
+      - 3RdParty/*.cmd
 #    tags:
 #    - 'v*'
   schedule:
