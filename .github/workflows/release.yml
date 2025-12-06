@@ -17,7 +17,7 @@ on:
 
 jobs:
   prepare:
-    if: github.event_name == 'schedule' || github.event_name == 'push'
+    if: github.event_name == 'schedule' || ( github.event_name == 'push' && beginWith (github.ref, 'refs/tags/v') )
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
