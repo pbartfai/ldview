@@ -12,8 +12,8 @@ on:
       - appveyor.yml
 #    tags:
 #    - 'v*'
-#  schedule:
-#  - cron: '0 10 * * 0'
+  schedule:
+  - cron: '0 19 7 * *'
 
 jobs:
   prepare:
