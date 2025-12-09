@@ -336,11 +336,12 @@ jobs:
           pkg install -y git wget qt5-qmake gmake gl2ps tinyxml lib3ds libosmesa minizip qt5-opengl qt5-printsupport qt5-linguisttools qt5-buildtools qt5-linguist desktop-file-utils shared-mime-info ccache
           git clone --depth 1 https://git.FreeBSD.org/ports.git /usr/ports
           cd QT/freebsd
-          make GH_TAGNAME=$GITHUB_SHA fetch
-          make GH_TAGNAME=$GITHUB_SHA makesum
-          make GH_TAGNAME=$GITHUB_SHA extract
-          make GH_TAGNAME=$GITHUB_SHA
-          make GH_TAGNAME=$GITHUB_SHA package
+          make GH_TAGNAME=$GITHUB_SHA WITH_CCACHE_BUILD=yes fetch
+          make GH_TAGNAME=$GITHUB_SHA WITH_CCACHE_BUILD=yes makesum
+          make GH_TAGNAME=$GITHUB_SHA WITH_CCACHE_BUILD=yes extract
+          make GH_TAGNAME=$GITHUB_SHA WITH_CCACHE_BUILD=yes 
+          make GH_TAGNAME=$GITHUB_SHA WITH_CCACHE_BUILD=yes package
+          ccache -s
           mv -f work/pkg/ldview*.pkg $(echo work/pkg/ldview*.pkg| sed 's/\.pkg$/\.freebsd15\.pkg/g')
     - name: Upload packages
       if: needs.prepare.outputs.tag != ''
