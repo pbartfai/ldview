@@ -333,7 +333,7 @@ jobs:
       with:
         release: "15.0"
         run: |
-          pkg install -y git wget qt5-qmake gmake gl2ps tinyxml lib3ds libosmesa minizip qt5-opengl qt5-printsupport qt5-linguisttools qt5-buildtools qt5-linguist desktop-file-utils
+          pkg install -y git wget qt5-qmake gmake gl2ps tinyxml lib3ds libosmesa minizip qt5-opengl qt5-printsupport qt5-linguisttools qt5-buildtools qt5-linguist desktop-file-utils update-mime-database
           git clone --depth 1 https://git.FreeBSD.org/ports.git /usr/ports
           cd QT
           ./freebsd.sh
