@@ -338,7 +338,7 @@ jobs:
           cd QT
           ./freebsd.sh
     - name: Upload packages
-      if: needs.prepare.outputs.tag != ''
+#      if: needs.prepare.outputs.tag != ''
       env:
         GH_TOKEN: ${{ github.token }}
         GH_REPO: ${{ github.repository }}
