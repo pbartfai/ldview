@@ -322,6 +322,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run:  gh release upload "${{ needs.prepare.outputs.tag }}" MacOSX/LDView/distrib/LDView*.dmg
   build-freebsd:
+    if: always()
     runs-on: ubuntu-latest
     needs: [prepare]
     steps:
@@ -334,8 +335,16 @@ jobs:
         run: |
           pkg install -y git wget qt5-qmake gmake gl2ps tinyxml lib3ds libosmesa minizip qt5-opengl qt5-printsupport qt5-linguisttools qt5-buildtools qt5-linguist desktop-file-utils shared-mime-info
           git clone --depth 1 https://git.FreeBSD.org/ports.git /usr/ports
-          cd QT
-          ./freebsd.sh
+          cd QT/freebsd
+          make GH_TAGNAME=$GITHUB_SHA fetch
+          make GH_TAGNAME=$GITHUB_SHA makesum
+          make GH_TAGNAME=$GITHUB_SHA extract
+          make GH_TAGNAME=$GITHUB_SHA
+          make GH_TAGNAME=$GITHUB_SHA package
+          PKG=$(echo work/pkg/ldview*.pkg)
+          PKG1=$(echo $PKG| sed 's/\.pkg$/\.freebsd15\.pkg/g')
+          mv -f $PKG $PKG1
+          ls -l $PKG1
     - name: Upload packages
       if: needs.prepare.outputs.tag != ''
       env:
