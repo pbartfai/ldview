@@ -13,7 +13,7 @@ on:
 #    tags:
 #    - 'v*'
   schedule:
-  - cron: '0 8,9 9 * *'
+  - cron: '0 11 9 * *'
 
 jobs:
   prepare:
@@ -333,7 +333,7 @@ jobs:
       with:
         release: "15.0"
         run: |
-          pkg install -y git wget qt5-qmake gmake gl2ps tinyxml lib3ds libosmesa minizip qt5-opengl qt5-printsupport qt5-linguisttools qt5-buildtools qt5-linguist desktop-file-utils shared-mime-info
+          pkg install -y git wget qt5-qmake gmake gl2ps tinyxml lib3ds libosmesa minizip qt5-opengl qt5-printsupport qt5-linguisttools qt5-buildtools qt5-linguist desktop-file-utils shared-mime-info ccache
           git clone --depth 1 https://git.FreeBSD.org/ports.git /usr/ports
           cd QT/freebsd
           make GH_TAGNAME=$GITHUB_SHA fetch
@@ -341,10 +341,7 @@ jobs:
           make GH_TAGNAME=$GITHUB_SHA extract
           make GH_TAGNAME=$GITHUB_SHA
           make GH_TAGNAME=$GITHUB_SHA package
-          PKG=$(echo work/pkg/ldview*.pkg)
-          PKG1=$(echo $PKG| sed 's/\.pkg$/\.freebsd15\.pkg/g')
-          mv -f $PKG $PKG1
-          ls -l $PKG1
+          mv -f work/pkg/ldview*.pkg $(echo work/pkg/ldview*.pkg| sed 's/\.pkg$/\.freebsd15\.pkg/g')
     - name: Upload packages
       if: needs.prepare.outputs.tag != ''
       env:
