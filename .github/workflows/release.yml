@@ -10,8 +10,8 @@ on:
       - 3rdParty/*.cmd
       - 3rdParty/BuildInstructions/MacOSX/*
       - appveyor.yml
-#  schedule:
-#  - cron: '0 10 * * 0'
+  schedule:
+  - cron: '8 30 17 * *'
 
 jobs:
   prepare:
