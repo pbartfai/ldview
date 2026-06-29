@@ -447,9 +447,9 @@ jobs:
     - name: Build FreeBSD
       uses: vmactions/freebsd-vm@v1
       with:
-        release: "15.0"
+        release: "15.1"
         run: |
-          pkg install -y git wget gmake gl2ps tinyxml2 libosmesa freeglut libglvnd minizip desktop-file-utils shared-mime-info ccache qt6-base qt6-tools
+          pkg install -y git wget gmake gl2ps tinyxml2 mesa-devel freeglut libglvnd minizip desktop-file-utils shared-mime-info ccache qt6-base qt6-tools
           git clone --depth 1 https://git.FreeBSD.org/ports.git /usr/ports
           cd QT/freebsd
           make GH_TAGNAME=$GITHUB_SHA WITH_CCACHE_BUILD=yes fetch
