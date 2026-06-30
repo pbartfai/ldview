@@ -57,12 +57,12 @@ jobs:
   build-windows:
     if: always()
     needs: [prepare]
-    runs-on: windows-2025
+    runs-on: windows-2025-vs2026
     steps:
     - name: Checkout
       uses: actions/checkout@v6
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
     - name: Install Visual Studio component WinXP
       if: needs.prepare.outputs.tag != ''
       shell: cmd
@@ -141,7 +141,7 @@ jobs:
         run:  sudo ./QT/docker/install-devel-packages.sh
       - name: Cache
         if: endsWith(github.ref, '/master')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path:  /home/runner/.cache/ccache
           key: ubuntu
@@ -175,7 +175,7 @@ jobs:
         run:  sudo dnf install -y gh
       - name: Cache
         if: endsWith(github.ref, '/master')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /github/home/.cache/ccache
           key: fedora
@@ -229,7 +229,7 @@ jobs:
         run:  ./QT/docker/install-devel-packages.sh
       - name: Cache
         if: endsWith(github.ref, '/master')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /github/home/.cache/ccache
           key: opensuse-leap
@@ -258,14 +258,14 @@ jobs:
         if:  github.server_url != 'https://github.com'
         run: zypper --non-interactive install -y nodejs
       - name: Install developement packages
-        run:  zypper --non-interactive install git rpm-build rpmlint libqt5-qtbase-devel libqt5-linguist zlib-devel libpng16-compat-devel libjpeg8-devel wget glu-devel gl2ps-devel tinyxml-devel minizip-devel hostname
+        run:  zypper --non-interactive install git rpm-build rpmlint libqt5-qtbase-devel libqt5-linguist zlib-devel libpng16-compat-devel libjpeg8-devel wget glu-devel gl2ps-devel tinyxml2-devel minizip-devel hostname
       - name: Install gh package
         run: |
           zypper ar https://cli.github.com/packages/rpm/gh-cli.repo
           zypper in -y gh ccache || true
       - name: Cache
         if: endsWith(github.ref, '/master')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /github/home/.ccache
           key: appimage
@@ -307,7 +307,7 @@ jobs:
         run:  apt-get install -y gh
       - name: Cache
         if: endsWith(github.ref, '/master')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /github/home/.cache/ccache
           key: debian
@@ -341,7 +341,7 @@ jobs:
         run:  pacman -Sy --noconfirm github-cli ccache
       - name: Cache
         if: endsWith(github.ref, '/master')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /.cache/ccache
           key: arch
@@ -382,7 +382,7 @@ jobs:
         run:  apk add github-cli ccache tar
       - name: Cache
         if: endsWith(github.ref, '/master')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.ccache
           key: alpine
@@ -447,9 +447,9 @@ jobs:
     - name: Build FreeBSD
       uses: vmactions/freebsd-vm@v1
       with:
-        release: "15.0"
+        release: "15.1"
         run: |
-          pkg install -y git wget gmake gl2ps tinyxml libosmesa freeglut libglvnd minizip desktop-file-utils shared-mime-info ccache qt6-base qt6-tools
+          pkg install -y git wget gmake gl2ps tinyxml2 mesa-devel freeglut libglvnd minizip desktop-file-utils shared-mime-info ccache qt6-base qt6-tools
           git clone --depth 1 https://git.FreeBSD.org/ports.git /usr/ports
           cd QT/freebsd
           make GH_TAGNAME=$GITHUB_SHA WITH_CCACHE_BUILD=yes fetch
