@@ -103,7 +103,8 @@ jobs:
         GH_REPO: ${{ github.repository }}
       run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.zip
   build-windows-installer:
-    if: needs.prepare.outputs.tag != ''
+#    if: needs.prepare.outputs.tag != ''
+    if: always()
     needs: 
       - build-windows
       - build-windows-32bit
@@ -120,6 +121,13 @@ jobs:
     - name: Build LDView
       shell: cmd
       run: |
+        dir
+        "%PROGRAMFILES%"\7-zip\7z x windows-32bit.zip
+        "%PROGRAMFILES%"\7-zip\7z x windows-64bit.zip
+        dir
+        mkdir Build
+        mkdir Build\Release
+        mkdir Build\Release64
         "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView64.iss
     - name: Upload Setup
       if: needs.prepare.outputs.tag != ''
