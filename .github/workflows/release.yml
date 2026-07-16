@@ -77,6 +77,7 @@ jobs:
         msbuild LDView.vcxproj                    /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /t:build /m /p:XPDeprecationWarning=false
         msbuild Launcher\Launcher.vcxproj         /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /m
         msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /m
+        "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView.iss
     - name: Upload build artifacts
       uses: actions/upload-artifact@v6
       with:
