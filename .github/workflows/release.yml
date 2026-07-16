@@ -77,7 +77,6 @@ jobs:
         msbuild LDView.vcxproj                    /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=v141_xp /t:build /m /p:XPDeprecationWarning=false
         msbuild Launcher\Launcher.vcxproj         /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=v141_xp /m
         msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=v143    /m
-        "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView.iss
     - name: Upload build artifacts
       uses: actions/upload-artifact@v6
       with:
@@ -102,7 +101,7 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
         GH_REPO: ${{ github.repository }}
-      run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.exe Setup\LDView*.zip
+      run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.zip
   build-windows-installer:
     if: needs.prepare.outputs.tag != ''
     needs: 
