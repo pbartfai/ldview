@@ -121,10 +121,8 @@ jobs:
     - name: Build LDView
       shell: cmd
       run: |
-        dir
-        "%PROGRAMFILES%"\7-zip\7z x windows-32bit.zip
-        "%PROGRAMFILES%"\7-zip\7z x windows-64bit.zip
-        dir
+        dir windows-32bit
+        dir windows-64bit
         mkdir Build
         mkdir Build\Release
         mkdir Build\Release64
