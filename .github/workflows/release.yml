@@ -54,6 +54,43 @@ jobs:
             gh release create --draft "${{ steps.tag.outputs.tag }}" --title "LDView $ver"
           fi
         fi
+  build-windows2022:
+    if: always()
+    needs: [prepare]
+    runs-on: windows-2022
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v3
+    - name: Install Visual Studio component WinXP
+#      if: needs.prepare.outputs.tag != ''
+      shell: cmd
+      run: |
+        if exist "C:\Program Files\Microsoft Visual Studio\2022\Enterprise" "c:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify --installPath "C:\Program Files\Microsoft Visual Studio\2022\Enterprise" --quiet --norestart --add Microsoft.VisualStudio.Component.WinXP
+        if exist "C:\Program Files\Microsoft Visual Studio\18\Enterprise"   "c:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify --installPath "C:\Program Files\Microsoft Visual Studio\18\Enterprise"   --quiet --norestart --add Microsoft.VisualStudio.Component.WinXP --add Microsoft.VisualStudio.Component.VC.v141.x86.x64
+    - name: Build LDView32
+#      if: needs.prepare.outputs.tag != ''
+      shell: cmd
+      run: |
+        msbuild LDView.vcxproj /p:Configuration=Release /p:SolutionDir=%CD%\ /p:Platform=win32 /t:build /m /p:XPDeprecationWarning=false
+        "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView.iss
+    - name: Build Portable package
+#      if: needs.prepare.outputs.tag != ''
+      shell: cmd
+      run: |
+        for /f "skip=2 tokens=2 delims=," %%i in ('find "ProductVersion" LDView.rc') do set VER=%%i
+        set VER=%VER:"=%
+        set VER=%VER: =%
+        copy LDExporter\LGEO.xml .
+        "%PROGRAMFILES%"\7-zip\7z a -bb1 Setup\LDView-portable-%VER%.zip license.txt Readme.txt Help.html ChangeHistory.html m6459.ldr 8464.mpd LGEO.xml "LDView Home Page.url" LDView.exe
+        del LGEO.xml
+    - name: Upload Setup
+      if: needs.prepare.outputs.tag != ''
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+      run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.exe Setup\LDView*.zip
   build-windows:
     if: always()
     needs: [prepare]
@@ -63,12 +100,6 @@ jobs:
       uses: actions/checkout@v6
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v3
-    - name: Install Visual Studio component WinXP
-      if: needs.prepare.outputs.tag != ''
-      shell: cmd
-      run: |
-        if exist "C:\Program Files\Microsoft Visual Studio\2022\Enterprise" "c:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify --installPath "C:\Program Files\Microsoft Visual Studio\2022\Enterprise" --quiet --norestart --add Microsoft.VisualStudio.Component.WinXP
-        if exist "C:\Program Files\Microsoft Visual Studio\18\Enterprise"   "c:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify --installPath "C:\Program Files\Microsoft Visual Studio\18\Enterprise"   --quiet --norestart --add Microsoft.VisualStudio.Component.WinXP --add Microsoft.VisualStudio.Component.VC.v141.x86.x64
     - name: Build LDView
       shell: cmd
       run: |
@@ -86,12 +117,6 @@ jobs:
         msbuild Translations\German\German.vcxproj       /p:Platform=x64 /p:Configuration=Release /m
         msbuild Translations\Italian\Italian.vcxproj     /p:Platform=x64 /p:Configuration=Release /m
         msbuild Translations\Czech\Czech.vcxproj         /p:Platform=x64 /p:Configuration=Release /m
-    - name: Build LDView32
-      if: needs.prepare.outputs.tag != ''
-      shell: cmd
-      run: |
-        msbuild LDView.vcxproj /p:Configuration=Release /p:SolutionDir=%CD%\ /p:Platform=win32 /t:build /m /p:XPDeprecationWarning=false
-        "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView.iss
     - name: Build Portable package
       if: needs.prepare.outputs.tag != ''
       shell: cmd
@@ -104,8 +129,6 @@ jobs:
         "%PROGRAMFILES%"\7-zip\7z a -bb1 Setup\LDView64-portable-%VER%.zip license.txt Readme.txt Help.html ChangeHistory.html m6459.ldr 8464.mpd LGEO.xml "LDView Home Page.url" LDView64.exe
         copy Build\Release\LDView.exe .
         del LDView64.exe
-        "%PROGRAMFILES%"\7-zip\7z a -bb1 Setup\LDView-portable-%VER%.zip license.txt Readme.txt Help.html ChangeHistory.html m6459.ldr 8464.mpd LGEO.xml "LDView Home Page.url" LDView.exe
-        del LGEO.xml
     - name: Upload Setup
       if: needs.prepare.outputs.tag != ''
       env:
