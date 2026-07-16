@@ -75,11 +75,12 @@ jobs:
       shell: cmd
       run: |
         msbuild LDView.vcxproj                    /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /t:build /m /p:XPDeprecationWarning=false
-        msbuild Launcher\Launcher.vcxproj         /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
-        msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
+        msbuild Launcher\Launcher.vcxproj         /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /m
+        msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /m
     - name: Upload build artifacts
       uses: actions/upload-artifact@v6
       with:
+        name: windows-32bit
         path: |
           Build\Release\LDView.exe
           Build\Release\LDView.com
@@ -164,6 +165,7 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v6
       with:
+        name: windows-64bit
         path: |
           Build\Release64\LDView64.exe
           Build\Release64\LDViewThumbs64.dll
