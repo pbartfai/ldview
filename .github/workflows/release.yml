@@ -73,8 +73,9 @@ jobs:
 #      if: needs.prepare.outputs.tag != ''
       shell: cmd
       run: |
-        msbuild LDView.vcxproj /p:Configuration=Release /p:SolutionDir=%CD%\ /p:Platform=win32 /t:build /m /p:XPDeprecationWarning=false
-        "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView.iss
+        msbuild LDView.vcxproj                    /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /t:build /m /p:XPDeprecationWarning=false
+        msbuild Launcher\Launcher.vcxproj         /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
+        msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
     - name: Build Portable package
 #      if: needs.prepare.outputs.tag != ''
       shell: cmd
@@ -106,8 +107,6 @@ jobs:
         if exist "C:\Program Files\Microsoft Visual Studio\2022\Enterprise" set TOOLSET=v143
         if exist "C:\Program Files\Microsoft Visual Studio\18\Enterprise"   set TOOLSET=v145
         msbuild LDView.vcxproj                    /p:SolutionDir=%CD%\ /p:Platform=x64   /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
-        msbuild Launcher\Launcher.vcxproj         /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
-        msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
         msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=x64   /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
         "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView64.iss
     - name: Translation
