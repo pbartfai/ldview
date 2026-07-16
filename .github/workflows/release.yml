@@ -531,7 +531,7 @@ jobs:
     if: github.event_name == 'schedule'
     needs:
       - prepare
-      - build-windows
+      - build-windows-installer
       - build-ubuntu
       - build-fedora
       - build-opensuse-leap
