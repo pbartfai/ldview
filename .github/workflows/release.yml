@@ -54,8 +54,9 @@ jobs:
             gh release create --draft "${{ steps.tag.outputs.tag }}" --title "LDView $ver"
           fi
         fi
-  build-windows2022:
+  build-windows-32bit:
     if: always()
+#   if: needs.prepare.outputs.tag != ''
     needs: [prepare]
     runs-on: windows-2022
     steps:
@@ -76,6 +77,14 @@ jobs:
         msbuild LDView.vcxproj                    /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /t:build /m /p:XPDeprecationWarning=false
         msbuild Launcher\Launcher.vcxproj         /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
         msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=win32 /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v6
+      with:
+        path: |
+          Build\Release\LDView.exe
+          Build\Release\LDView.com
+          Build\Release\LDViewThumbs.dll
+        if-no-files-found: error
     - name: Build Portable package
 #      if: needs.prepare.outputs.tag != ''
       shell: cmd
@@ -92,6 +101,31 @@ jobs:
         GH_TOKEN: ${{ github.token }}
         GH_REPO: ${{ github.repository }}
       run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.exe Setup\LDView*.zip
+  build-windows-installer:
+    if: needs.prepare.outputs.tag != ''
+    needs: 
+      - build-windows
+      - build-windows-32bit
+    runs-on: windows-2025-vs2026
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v3
+    - name: Download build artifacts
+      uses: actions/download-artifact@v7
+      with:
+        path: .
+    - name: Build LDView
+      shell: cmd
+      run: |
+        "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView64.iss
+    - name: Upload Setup
+      if: needs.prepare.outputs.tag != ''
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+      run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.exe
   build-windows:
     if: always()
     needs: [prepare]
@@ -108,7 +142,6 @@ jobs:
         if exist "C:\Program Files\Microsoft Visual Studio\18\Enterprise"   set TOOLSET=v145
         msbuild LDView.vcxproj                    /p:SolutionDir=%CD%\ /p:Platform=x64   /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
         msbuild LDViewThumbs\LDViewThumbs.vcxproj /p:SolutionDir=%CD%\ /p:Platform=x64   /p:Configuration=Release /p:PlatformToolset=%TOOLSET% /m
-        "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView64.iss
     - name: Translation
       shell: cmd
       run: |
@@ -128,6 +161,13 @@ jobs:
         "%PROGRAMFILES%"\7-zip\7z a -bb1 Setup\LDView64-portable-%VER%.zip license.txt Readme.txt Help.html ChangeHistory.html m6459.ldr 8464.mpd LGEO.xml "LDView Home Page.url" LDView64.exe
         copy Build\Release\LDView.exe .
         del LDView64.exe
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v6
+      with:
+        path: |
+          Build\Release64\LDView64.exe
+          Build\Release64\LDViewThumbs64.dll
+        if-no-files-found: error
     - name: Upload Setup
       if: needs.prepare.outputs.tag != ''
       env:
