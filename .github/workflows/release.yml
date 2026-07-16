@@ -121,11 +121,11 @@ jobs:
     - name: Build LDView
       shell: cmd
       run: |
-        dir windows-32bit
-        dir windows-64bit
         mkdir Build
         mkdir Build\Release
         mkdir Build\Release64
+        copy windows-32bit\*.* Build\Release\
+        copy windows-64bit\*.* Build\Releas64\
         "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView64.iss
     - name: Upload Setup
       if: needs.prepare.outputs.tag != ''
