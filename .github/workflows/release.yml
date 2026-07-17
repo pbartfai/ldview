@@ -11,7 +11,7 @@ on:
       - 3rdParty/BuildInstructions/MacOSX/*
       - appveyor.yml
   schedule:
-  - cron: '0 22 16 * *'
+  - cron: '0 5 17 * *'
 
 jobs:
   prepare:
@@ -55,7 +55,6 @@ jobs:
           fi
         fi
   build-windows-32bit:
-#    if: always()
     if: needs.prepare.outputs.tag != ''
     needs: [prepare]
     runs-on: windows-2022
@@ -96,7 +95,7 @@ jobs:
         copy LDExporter\LGEO.xml .
         "%PROGRAMFILES%"\7-zip\7z a -bb1 Setup\LDView-portable-%VER%.zip license.txt Readme.txt Help.html ChangeHistory.html m6459.ldr 8464.mpd LGEO.xml "LDView Home Page.url" LDView.exe
         del LGEO.xml
-    - name: Upload Setup
+    - name: Upload Portable package
       if: needs.prepare.outputs.tag != ''
       env:
         GH_TOKEN: ${{ github.token }}
@@ -104,7 +103,6 @@ jobs:
       run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.zip
   build-windows-installer:
     if: needs.prepare.outputs.tag != ''
-#    if: always()
     needs: 
       - build-windows
       - build-windows-32bit
@@ -127,6 +125,7 @@ jobs:
         copy windows-32bit\*.* Build\Release\
         copy windows-64bit\*.* Build\Release64\
         "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView64.iss
+        "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView.iss
     - name: Upload Setup
       if: needs.prepare.outputs.tag != ''
       env:
@@ -169,6 +168,7 @@ jobs:
         copy Build\Release\LDView.exe .
         del LDView64.exe
     - name: Upload build artifacts
+      if: needs.prepare.outputs.tag != ''
       uses: actions/upload-artifact@v6
       with:
         name: windows-64bit
@@ -176,12 +176,12 @@ jobs:
           Build\Release64\LDView64.exe
           Build\Release64\LDViewThumbs64.dll
         if-no-files-found: error
-    - name: Upload Setup
+    - name: Upload Portable package
       if: needs.prepare.outputs.tag != ''
       env:
         GH_TOKEN: ${{ github.token }}
         GH_REPO: ${{ github.repository }}
-      run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.exe Setup\LDView*.zip
+      run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.zip
     - name: Build BuildPartsCatalog
       shell: cmd
       run: |
@@ -548,6 +548,7 @@ jobs:
       - build-appimage
       - build-arch
       - build-mac
+      - build-freebsd
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
