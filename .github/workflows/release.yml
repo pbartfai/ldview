@@ -11,7 +11,7 @@ on:
       - 3rdParty/BuildInstructions/MacOSX/*
       - appveyor.yml
   schedule:
-  - cron: '0 5 17 * *'
+  - cron: '5 8 17 * *'
 
 jobs:
   prepare:
@@ -127,7 +127,6 @@ jobs:
         "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView64.iss
         "c:\Program Files (x86)\Inno Setup 6\ISCC.exe" LDView.iss
     - name: Upload Setup
-      if: needs.prepare.outputs.tag != ''
       env:
         GH_TOKEN: ${{ github.token }}
         GH_REPO: ${{ github.repository }}
