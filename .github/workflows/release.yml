@@ -11,7 +11,7 @@ on:
       - 3rdParty/BuildInstructions/MacOSX/*
       - appveyor.yml
   schedule:
-  - cron: '5 8 17 * *'
+  - cron: '15 11 17 * *'
 
 jobs:
   prepare:
@@ -103,7 +103,8 @@ jobs:
       run:  gh release upload "${{ needs.prepare.outputs.tag }}" Setup\LDView*.zip
   build-windows-installer:
     if: needs.prepare.outputs.tag != ''
-    needs: 
+    needs:
+      - prepare
       - build-windows
       - build-windows-32bit
     runs-on: windows-2025-vs2026
