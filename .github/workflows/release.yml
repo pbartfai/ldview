@@ -11,7 +11,7 @@ on:
       - 3rdParty/BuildInstructions/MacOSX/*
       - appveyor.yml
   schedule:
-  - cron: '15 11 17 * *'
+  - cron: '15 13 17 * *'
 
 jobs:
   prepare:
@@ -93,8 +93,10 @@ jobs:
         set VER=%VER:"=%
         set VER=%VER: =%
         copy LDExporter\LGEO.xml .
+        copy Build\Release\LDView.exe .
         "%PROGRAMFILES%"\7-zip\7z a -bb1 Setup\LDView-portable-%VER%.zip license.txt Readme.txt Help.html ChangeHistory.html m6459.ldr 8464.mpd LGEO.xml "LDView Home Page.url" LDView.exe
         del LGEO.xml
+        del LDView.exe
     - name: Upload Portable package
       if: needs.prepare.outputs.tag != ''
       env:
@@ -165,7 +167,6 @@ jobs:
         copy LDExporter\LGEO.xml .
         copy Build\Release64\LDView64.exe .
         "%PROGRAMFILES%"\7-zip\7z a -bb1 Setup\LDView64-portable-%VER%.zip license.txt Readme.txt Help.html ChangeHistory.html m6459.ldr 8464.mpd LGEO.xml "LDView Home Page.url" LDView64.exe
-        copy Build\Release\LDView.exe .
         del LDView64.exe
     - name: Upload build artifacts
       if: needs.prepare.outputs.tag != ''
