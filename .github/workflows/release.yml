@@ -573,7 +573,8 @@ jobs:
           cat >/tmp/Downloads.md <<EOF
           | Platform | Package |
           |---|---|
-          | Windows | [installer64](${BASE}/$(grep -E 'LDView64.*exe' /tmp/assets)),[portable64](${BASE}/$(grep -E 'LDView64-portable.*zip' /tmp/assets)) |
+          | Windows 10/11 x64| [installer64](${BASE}/$(grep -E 'LDView64.*exe' /tmp/assets)),[portable64](${BASE}/$(grep -E 'LDView64-portable.*zip' /tmp/assets)) |
+          | Windows XP | [installerXP](${BASE}/$(grep -E 'LDView-.*exe' /tmp/assets)),[portableXP](${BASE}/$(grep -E 'LDView-portable.*zip' /tmp/assets)) |
           | MacOS | [dmg](${BASE}/$(grep -E 'LDView.*dmg' /tmp/assets)) |
           | Appimage | [appimage](${BASE}/LDView-x86_64.AppImage) |
           | AlpineLinux | |
