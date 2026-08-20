@@ -568,12 +568,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}  
         run: |
+          BASE="https://github.com/${{ github.repository }}/releases/download/${TAG}"
           gh release view "${{ needs.prepare.outputs.tag }}" >>/tmp/assets
           cat >/tmp/Downloads.md <<EOF
           | Platform | Package |
           |---|---|
           | Windows | |
-          | MacOS | |
+          | MacOS | [dmg](${BASE}) |
           | Debian | |
           | Fedora | |
           | openSUSE | |
