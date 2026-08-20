@@ -11,7 +11,7 @@ on:
       - 3rdParty/BuildInstructions/MacOSX/*
       - appveyor.yml
   schedule:
-  - cron: '25 14 20 * *'
+  - cron: '35 15 20 * *'
 
 jobs:
   prepare:
@@ -584,7 +584,7 @@ jobs:
           | Arch | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*pkg\.tar\.zst' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*pkg\.tar\.zst' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*pkg.tar.zst' /tmp/assets)) |
           | Debian $(grep -E 'ldview_[0-9].*debian.*deb' /tmp/assets|grep -Eo 'debian-[a-z]*' | sed 's/debian-//g' ) | [qt6](${BASE}/$(grep -E 'ldview_[0-9].*debian.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*debian.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*debian.*deb' /tmp/assets)) |
           | Fedora $(grep -E 'ldview-[0-9].*fc.*rpm' /tmp/assets|grep -Eo 'fc[0-9]*\.' |grep -Eo '[0-9]*') | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*fc.*rpm' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*fc.*rpm' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*fc.*rpm' /tmp/assets)) |
-          | openSUSE $(grep -E 'ldview-[0-9].*openSUSE.*rpm' /tmp/assets|grep -Eo 'openSUSE[0-9]*|sed 's/openSUSE//' |sed -E 's/([0-9]{2})([0-9])/\1\.\2/g' ) | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*openSUSE.*rpm' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*openSUSE.*rpm' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*openSUSE.*rpm' /tmp/assets)) |
+          | openSUSE $(grep -E 'ldview-[0-9].*openSUSE.*rpm' /tmp/assets|grep -Eo 'openSUSE[0-9]*'|sed 's/openSUSE//' |sed -E 's/([0-9]{2})([0-9])/\1\.\2/g' ) | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*openSUSE.*rpm' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*openSUSE.*rpm' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*openSUSE.*rpm' /tmp/assets)) |
           | Ubuntu $(grep -E 'ldview_[0-9].*ubuntu.*deb' /tmp/assets|grep -Eo 'ubuntu-[0-9]*\.[0-9]*' | sed 's/ubuntu-//g' ) | [qt6](${BASE}/$(grep -E 'ldview_[0-9].*ubuntu.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*ubuntu.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*ubuntu.*deb' /tmp/assets)) |
           | FreeBSD | [pkg](${BASE}/$(grep -E 'ldview.*freebsd.*pkg' /tmp/assets)) |
           EOF
