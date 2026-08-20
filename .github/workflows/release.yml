@@ -569,7 +569,7 @@ jobs:
           GH_REPO: ${{ github.repository }}  
         run: |
           BASE="https://github.com/${{ github.repository }}/releases/download/${{ needs.prepare.outputs.tag }}"
-          gh release view "${{ needs.prepare.outputs.tag }}" |grep asset: | cut -f2 >>/tmp/assets
+          gh release view "${{ needs.prepare.outputs.tag }}" |grep asset: | cut -f2 >/tmp/assets
           cat >/tmp/Downloads.md <<EOF
           | Platform | Package |
           |---|---|
