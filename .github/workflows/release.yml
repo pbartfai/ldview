@@ -11,7 +11,7 @@ on:
       - 3rdParty/BuildInstructions/MacOSX/*
       - appveyor.yml
   schedule:
-  - cron: '0 10 20 * *'
+  - cron: '50 10 20 * *'
 
 jobs:
   prepare:
@@ -568,13 +568,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}  
         run: |
-          BASE="https://github.com/${{ github.repository }}/releases/download/${TAG}"
-          gh release view "${{ needs.prepare.outputs.tag }}" >>/tmp/assets
+          BASE="https://github.com/${{ github.repository }}/releases/download/${{ needs.prepare.outputs.tag }}"
+          gh release view "${{ needs.prepare.outputs.tag }}" |grep asset: | cut -f2 >>/tmp/assets
           cat >/tmp/Downloads.md <<EOF
           | Platform | Package |
           |---|---|
-          | Windows | |
-          | MacOS | [dmg](${BASE}) |
+          | Windows | [installer64](${BASE}/$(grep -E 'LDView64.*exe' /tmp/assets)),[portable64](${BASE}/$(grep -E 'LDView64-portable.*zip' /tmp/assets)) |
+          | MacOS | [dmg](${BASE}/$(grep -E 'LDView.*dmg' /tmp/assets | cut -f2 )) |
           | Debian | |
           | Fedora | |
           | openSUSE | |
@@ -582,7 +582,6 @@ jobs:
           | Ubuntu | |
           | FreeBSD | |
           EOF
-          gh release view "${{ needs.prepare.outputs.tag }}" >>/tmp/Downloads.md
           gh release edit "${{ needs.prepare.outputs.tag }}" -F /tmp/Downloads.md
       - name: Remove old releases
         env:
