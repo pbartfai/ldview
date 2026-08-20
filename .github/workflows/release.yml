@@ -11,7 +11,7 @@ on:
       - 3rdParty/BuildInstructions/MacOSX/*
       - appveyor.yml
   schedule:
-  - cron: '55 11 20 * *'
+  - cron: '25 14 20 * *'
 
 jobs:
   prepare:
@@ -577,12 +577,12 @@ jobs:
           | Windows XP | [installerXP](${BASE}/$(grep -E 'LDView-.*exe' /tmp/assets)),[portableXP](${BASE}/$(grep -E 'LDView-portable.*zip' /tmp/assets)) |
           | MacOS | [dmg](${BASE}/$(grep -E 'LDView.*dmg' /tmp/assets)) |
           | Appimage | [appimage](${BASE}/LDView-x86_64.AppImage) |
-          | AlpineLinux | |
-          | Arch | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*pkg.tar.zst' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.pkg.tar.zst' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*pkg.tar.zst' /tmp/assets)) |
-          | Debian $(grep -E 'ldview-[0-9].*debian.*deb' /tmp/assets|grep -Eo 'debian-[a-z]*' | sed 's/debian-//g' ) | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*debian.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*debian.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*debian.*deb' /tmp/assets)) |
+          | AlpineLinux | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*\.apk' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*\.apk' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*\.apk' /tmp/assets))|
+          | Arch | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*pkg\.tar\.zst' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*pkg\.tar\.zst' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*pkg.tar.zst' /tmp/assets)) |
+          | Debian $(grep -E 'ldview_[0-9].*debian.*deb' /tmp/assets|grep -Eo 'debian-[a-z]*' | sed 's/debian-//g' ) | [qt6](${BASE}/$(grep -E 'ldview_[0-9].*debian.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*debian.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*debian.*deb' /tmp/assets)) |
           | Fedora $(grep -E 'ldview-[0-9].*fc.*rpm' /tmp/assets|grep -Eo 'fc[0-9]*\.' |grep -Eo '[0-9]*') | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*fc.*rpm' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*fc.*rpm' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*fc.*rpm' /tmp/assets)) |
-          | openSUSE | |
-          | Ubuntu $(grep -E 'ldview-[0-9].*ubuntu.*deb' /tmp/assets|grep -Eo 'ubuntu-[0-9]*\.[0-9]*' | sed 's/ubuntu-//g' ) | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*ubuntu.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*ubuntu.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*ubuntu.*deb' /tmp/assets)) |
+          | openSUSE $(grep -E 'ldview-[0-9].*openSUSE.*rpm' /tmp/assets|grep -Eo 'openSUSE[0-9]*|sed 's/openSUSE//' ) | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*openSUSE.*rpm' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*openSUSE.*rpm' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*openSUSE.*rpm' /tmp/assets)) |
+          | Ubuntu $(grep -E 'ldview_[0-9].*ubuntu.*deb' /tmp/assets|grep -Eo 'ubuntu-[0-9]*\.[0-9]*' | sed 's/ubuntu-//g' ) | [qt6](${BASE}/$(grep -E 'ldview_[0-9].*ubuntu.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*ubuntu.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*ubuntu.*deb' /tmp/assets)) |
           | FreeBSD | [pkg](${BASE}/$(grep -E 'ldview.*freebsd.*pkg' /tmp/assets)) |
           EOF
           gh release edit "${{ needs.prepare.outputs.tag }}" -F /tmp/Downloads.md
