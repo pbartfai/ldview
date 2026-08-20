@@ -582,7 +582,7 @@ jobs:
           | Debian $(grep -E 'ldview-[0-9].*debian.*deb' /tmp/assets|grep -Eo 'debian-[a-z]*' | sed 's/debian-//g' ) | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*debian.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*debian.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*debian.*deb' /tmp/assets)) |
           | Fedora $(grep -E 'ldview-[0-9].*fc.*rpm' /tmp/assets|grep -Eo 'fc[0-9]*\.' |grep -Eo '[0-9]*') | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*fc.*rpm' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*fc.*rpm' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*fc.*rpm' /tmp/assets)) |
           | openSUSE | |
-          | Ubuntu | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*ubuntu.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*ubuntu.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*ubuntu.*deb' /tmp/assets)) |
+          | Ubuntu $(grep -E 'ldview-[0-9].*ubuntu.*deb' /tmp/assets|grep -Eo 'ubuntu-[0-9]*\.[0-9]*' | sed 's/ubuntu-//g' ) | [qt6](${BASE}/$(grep -E 'ldview-[0-9].*ubuntu.*deb' /tmp/assets)) , [qt5](${BASE}/$(grep -E 'ldview-qt5.*ubuntu.*deb' /tmp/assets)) , [osmesa](${BASE}/$(grep -E 'ldview-osmesa.*ubuntu.*deb' /tmp/assets)) |
           | FreeBSD | [pkg](${BASE}/$(grep -E 'ldview.*freebsd.*pkg' /tmp/assets)) |
           EOF
           gh release edit "${{ needs.prepare.outputs.tag }}" -F /tmp/Downloads.md
