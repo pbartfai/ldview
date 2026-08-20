@@ -568,6 +568,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}  
         run: |
+          gh release view "${{ needs.prepare.outputs.tag }}" >>/tmp/assets
           cat >/tmp/Downloads.md <<EOF
           | Platform | Package |
           |---|---|
@@ -580,6 +581,7 @@ jobs:
           | Ubuntu | |
           | FreeBSD | |
           EOF
+          gh release view "${{ needs.prepare.outputs.tag }}" >>/tmp/Downloads.md
           gh release edit "${{ needs.prepare.outputs.tag }}" -F /tmp/Downloads.md
       - name: Remove old releases
         env:
