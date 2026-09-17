@@ -573,10 +573,11 @@ jobs:
         run: |
           BASE="https://github.com/${{ github.repository }}/releases/download/${{ needs.prepare.outputs.tag }}"
           gh release view "${{ needs.prepare.outputs.tag }}" |grep asset: | cut -f2 >/tmp/assets
+          pkgurl () {VAR=$(grep -E "$1" /tmp/assets) ; test -n "$VAR" && echo "[$2](${BASE}/$VAR)"}
           cat >/tmp/Downloads.md <<EOF
           | Platform | Package |
           |---|---|
-          | Windows 10/11 x64| $(WIN64=$(grep -E 'LDView64.*exe' /tmp/assets) ; test -n "${WIN64}" && echo "[installer64](${BASE}/${WIN64})") , $(WIN64P=$(grep -E 'LDView64-portable.*zip' /tmp/assets) ; test -n "${WIN64P}" && echo "[portable64](${BASE}/${WIN64P})") |
+          | Windows 10/11 x64| $(pkgurl 'LDView64.*exe' installer64) , $(pkgurl 'LDView64-portable.*zip' portable64) |
           | Windows XP |       $(WIN32=$(grep -E 'LDView-.*exe'  /tmp/assets) ; test -n "${WIN32}" && echo "[installerXP](${BASE}/${WIN32})") , $(WIN32P=$(grep -E 'LDView-portable.*zip'   /tmp/assets) ; test -n "${WIN32P}" && echo "[portableXP](${BASE}/${WIN32P})") |
           | MacOS |            $(MAC=$(grep -E 'LDView.*dmg' /tmp/assets)     ; test -n "${MAC}"   && echo "[dmg](${BASE}/${MAC})") |
           | AppImage |         $(test -n "$(grep -E LDView-x86_64.AppImage /tmp/assets)" && echo "[AppImage](${BASE}/LDView-x86_64.AppImage)") |
