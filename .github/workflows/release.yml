@@ -573,15 +573,15 @@ jobs:
         run: |
           BASE="https://github.com/${{ github.repository }}/releases/download/${{ needs.prepare.outputs.tag }}"
           gh release view "${{ needs.prepare.outputs.tag }}" |grep asset: | cut -f2 >/tmp/assets
-          pkgurl () {VAR=$(grep -E "$1" /tmp/assets) ; test -n "$VAR" && echo "[$2](${BASE}/$VAR)"}
+          pkgurl () { VAR=$(grep -E "$1" /tmp/assets) ; test -n "$VAR" && echo "[$2]($BASE/$VAR)"; }
           cat >/tmp/Downloads.md <<EOF
           | Platform | Package |
           |---|---|
           | Windows 10/11 x64| $(pkgurl 'LDView64.*exe' installer64) , $(pkgurl 'LDView64-portable.*zip' portable64) |
-          | Windows XP |       $(WIN32=$(grep -E 'LDView-.*exe'  /tmp/assets) ; test -n "${WIN32}" && echo "[installerXP](${BASE}/${WIN32})") , $(WIN32P=$(grep -E 'LDView-portable.*zip'   /tmp/assets) ; test -n "${WIN32P}" && echo "[portableXP](${BASE}/${WIN32P})") |
-          | MacOS |            $(MAC=$(grep -E 'LDView.*dmg' /tmp/assets)     ; test -n "${MAC}"   && echo "[dmg](${BASE}/${MAC})") |
-          | AppImage |         $(test -n "$(grep -E LDView-x86_64.AppImage /tmp/assets)" && echo "[AppImage](${BASE}/LDView-x86_64.AppImage)") |
-          | AlpineLinux |      $(qt6=$(grep -E 'ldview-[0-9].*\.apk' /tmp/assets) ; test -n "${qt6}" && echo "[qt6](${BASE}/${qt6})") , $(qt5=$(grep -E 'ldview-qt5.*\.apk' /tmp/assets) ; test -n "${qt5}" && echo "[qt5](${BASE}/${qt5})") , $(osmesa=$(grep -E 'ldview-osmesa.*\.apk' /tmp/assets) ; test -n "${osmesa}" && echo "[osmesa](${BASE}/${osmesa})") |
+          | Windows XP |       $(pkgurl 'LDView-.*exe'  installerXP) , $(pkgurl 'LDView-portable.*zip' portableXP) |
+          | MacOS |            $(pkgurl 'LDView.*dmg' dmg) |
+          | AppImage |         $(pkgurl LDView-x86_64.AppImage AppImage) |
+          | AlpineLinux |      $(pkgurl 'ldview-[0-9].*\.apk' qt6) , $(pkgurl 'ldview-qt5.*\.apk' qt5) , $(pkgurl 'ldview-osmesa.*\.apk' osmesa) |
           | Arch | $(qt6=$(grep -E 'ldview-[0-9].*pkg\.tar\.zst' /tmp/assets) ; test -n "qt6" && echo "[qt6](${BASE}/$qt6)") , $(qt5=$(grep -E 'ldview-qt5.*pkg\.tar\.zst' /tmp/assets) ;  test -n "${qt5}" && echo "[qt5](${BASE}/${qt5})") , $(osmesa=$(grep -E 'ldview-osmesa.*pkg.tar.zst' /tmp/assets) ; test -n "${osmesa}" && echo "[osmesa](${BASE}/${osmesa})") |
           | Debian $(grep -E 'ldview_[0-9].*debian.*deb' /tmp/assets|grep -Eo 'debian-[a-z]*' | sed 's/debian-//g' ) | $(qt6=$(grep -E 'ldview_[0-9].*debian.*deb' /tmp/assets) ; test -n "$qt6" && echo "[qt6](${BASE}/$qt6)") , $(qt5=$(grep -E 'ldview-qt5.*debian.*deb' /tmp/assets) ; test -n "$qt5" && echo "[qt5](${BASE}/$qt5)") , $(osmesa=$(grep -E 'ldview-osmesa.*debian.*deb' /tmp/assets) ; test -n "$osmesa" && echo "[osmesa](${BASE}/$osmesa)") |
           | Fedora $(grep -E 'ldview-[0-9].*fc.*rpm' /tmp/assets|grep -Eo 'fc[0-9]*\.' |grep -Eo '[0-9]*') | $(qt6=$(grep -E 'ldview-[0-9].*fc.*rpm' /tmp/assets) ; test -n "$qt6" && echo "[qt6](${BASE}/$qt6)") , $(qt5=$(grep -E 'ldview-qt5.*fc.*rpm' /tmp/assets) ; test -n "$qt5" && echo "[qt5](${BASE}/$qt5)") , $(osmesa=$(grep -E 'ldview-osmesa.*fc.*rpm' /tmp/assets) ; test -n "$osmesa" && echo "[osmesa](${BASE}/$osmesa)") |
