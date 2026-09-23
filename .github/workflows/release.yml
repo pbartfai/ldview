@@ -17,7 +17,7 @@ on:
 jobs:
   prepare:
 #    if: github.event_name == 'schedule' || ( github.event_name == 'push' && startsWith (github.ref, 'refs/tags/v') )
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
     steps:
@@ -205,7 +205,7 @@ jobs:
   build-ubuntu:
     if: always()
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -232,7 +232,7 @@ jobs:
   build-fedora:
     if: always()
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: fedora:latest
     steps:
@@ -293,7 +293,7 @@ jobs:
   build-opensuse-leap:
     if: always()
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: opensuse/leap:latest
     steps:
@@ -331,7 +331,7 @@ jobs:
   build-appimage:
     if: always()
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: opensuse/leap:15.4
     steps:
@@ -371,7 +371,7 @@ jobs:
   build-debian:
     if: always()
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: debian:latest
     steps:
@@ -407,7 +407,7 @@ jobs:
   build-arch:
     if: always()
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: archlinux:latest
     steps:
@@ -448,7 +448,7 @@ jobs:
   build-alpine:
     if: always()
     needs: [prepare]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     container:
       image: alpine:latest
     steps:
@@ -520,7 +520,7 @@ jobs:
           xcodebuild -scheme BuildPartsCatalog
   build-freebsd:
     if: needs.prepare.outputs.tag != ''
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     needs: [prepare]
     steps:
     - name: Checkout
@@ -560,7 +560,7 @@ jobs:
       - build-arch
       - build-mac
       - build-freebsd
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Checkout
         uses: actions/checkout@v7
